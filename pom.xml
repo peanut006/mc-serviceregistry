@@ -20,12 +20,14 @@
     </prerequisites>
 
     <properties>
-    	<elasticsearch.version>5.4.0</elasticsearch.version>
         <assertj-core.version>3.3.0</assertj-core.version>
         <awaitility.version>1.7.0</awaitility.version>
+        <cglib.version>3.2.5</cglib.version>
         <commons-io.version>2.4</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
         <cucumber.version>1.2.4</cucumber.version>
+        <cxf-rt-ws-security.version>3.1.10</cxf-rt-ws-security.version>
+        <elasticsearch.version>5.4.0</elasticsearch.version>
         <frontend-maven-plugin.version>1.0</frontend-maven-plugin.version>
         <gatling-maven-plugin.version>2.1.7</gatling-maven-plugin.version>
         <gatling.version>2.1.7</gatling.version>
@@ -69,27 +71,25 @@
         <sortpom-maven-plugin.version>2.5.0</sortpom-maven-plugin.version>
         <!--spring-security.version>4.1.0.RELEASE</spring-security.version -->
         <!-- our version of DATAES -->
-        <springdata.elasticsearch.version>3.1.0.FRQ-BUILD-SNAPSHOT</springdata.elasticsearch.version>
+        <springdata.elasticsearch.version>3.0.5.FRQ-RELEASE</springdata.elasticsearch.version>
         <springfox.version>2.7.0</springfox.version>
-        <cglib.version>3.2.5</cglib.version>
-        <cxf-rt-ws-security.version>3.1.10</cxf-rt-ws-security.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-commons</artifactId>
+                <version>2.1.0.M1</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
-	<dependency>
-		<groupId>org.apache.lucene</groupId>
-		<artifactId>lucene-codecs</artifactId>
-		<version>6.5.0</version>
-	</dependency>
-	<dependency>
-	    <groupId>org.apache.lucene</groupId>
-	    <artifactId>lucene-core</artifactId>
-	    <version>6.5.0</version>
-	</dependency>
-  
-    <dependency>
-        <groupId>com.fasterxml.jackson.datatype</groupId>
-        <artifactId>jackson-datatype-hibernate5</artifactId>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-hibernate5</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -133,11 +133,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.spatial4j</groupId>
-            <artifactId>spatial4j</artifactId>
-            <version>0.5</version>
-        </dependency>
-        <dependency>
             <groupId>com.ryantenney.metrics</groupId>
             <artifactId>metrics-spring</artifactId>
             <version>${metrics-spring.version}</version>
@@ -157,6 +152,11 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>com.spatial4j</groupId>
+            <artifactId>spatial4j</artifactId>
+            <version>0.5</version>
+        </dependency>
+        <dependency>
             <groupId>com.vividsolutions</groupId>
             <artifactId>jts</artifactId>
             <version>1.13</version>
@@ -171,24 +171,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- The HikariCP Java Agent is disabled by default, as it is experimental
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP-agent</artifactId>
-            <version>${HikariCP.version}</version>
-        </dependency>
-        -->
-        
-        <!-- web security -->
-		<dependency>
-		    <groupId>org.apache.cxf</groupId>
-		    <artifactId>cxf-rt-ws-security</artifactId>
-		    <version>${cxf-rt-ws-security.version}</version>
-		</dependency>
-		 <!--  -->
-		
-		
-
+        <!--  -->
 
         <dependency>
             <groupId>commons-io</groupId>
@@ -290,6 +273,11 @@
             <version>${javax.inject.version}</version>
         </dependency>
         <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
@@ -316,10 +304,19 @@
             <artifactId>cxf-rt-transports-http</artifactId>
             <version>3.1.11</version>
         </dependency>
+        <!-- The HikariCP Java Agent is disabled by default, as it is experimental
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP-agent</artifactId>
+            <version>${HikariCP.version}</version>
+        </dependency>
+        -->
+
+        <!-- web security -->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-ws-security</artifactId>
+            <version>${cxf-rt-ws-security.version}</version>
         </dependency>
 
         <!-- jhipster-needle-maven-add-dependency -->
@@ -328,6 +325,16 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-codecs</artifactId>
+            <version>6.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+            <version>6.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
@@ -346,19 +353,11 @@
             <version>3.3.0</version>
             <scope>test</scope>
             <exclusions>
-              <exclusion>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-              </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-log4j12</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
             </exclusions>
-        </dependency>
-
-        <!-- for generating sample data -->
-        <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>2.3.2</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.freemarker</groupId>
@@ -381,6 +380,14 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-envers</artifactId>
+        </dependency>
+
+        <!-- for generating sample data -->
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.3.2</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
@@ -417,13 +424,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
             <exclusions>
-              <exclusion>
-                <groupId>com.vaadin.external.google</groupId>
-                <artifactId>android-json</artifactId>
-              </exclusion>
+                <exclusion>
+                    <artifactId>android-json</artifactId>
+                    <groupId>com.vaadin.external.google</groupId>
+                </exclusion>
             </exclusions>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -432,6 +439,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-couchbase</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -450,10 +462,10 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
             <exclusions>
-              <exclusion>
-                <groupId>com.vaadin.external.google</groupId>
-                <artifactId>android-json</artifactId>
-              </exclusion>
+                <exclusion>
+                    <artifactId>android-json</artifactId>
+                    <groupId>com.vaadin.external.google</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -499,12 +511,6 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-data</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
 
         <!-- after to M3 migration -->
         <dependency>
@@ -512,17 +518,16 @@
             <artifactId>spring-security-messaging</artifactId>
             <version>${spring-security.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.wololo</groupId>
             <artifactId>jts2geojson</artifactId>
             <version>0.8.0</version>
-        </dependency>
-
-        <dependency>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-starter-data-couchbase</artifactId>
         </dependency>
     </dependencies>
 
@@ -532,12 +537,12 @@
             <url>https://jitpack.io</url>
         </repository>
         <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/libs-milestone</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/libs-milestone</url>
         </repository>
     </repositories>
     <pluginRepositories>
@@ -1043,15 +1048,5 @@
             </dependencies>
         </profile>
     </profiles>
-    
-    <dependencyManagement>
-      <dependencies>
-        <dependency>
-          <groupId>org.springframework.data</groupId>
-          <artifactId>spring-data-commons</artifactId>
-          <version>2.1.0.M1</version>
-        </dependency>
-      </dependencies>
-    </dependencyManagement>
-    
+
 </project>

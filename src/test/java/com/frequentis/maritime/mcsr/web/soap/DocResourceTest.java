@@ -3,10 +3,8 @@ package com.frequentis.maritime.mcsr.web.soap;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.junit.Assert.*;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,33 +13,25 @@ import javax.xml.ws.Endpoint;
 import javax.xml.ws.Service;
 
 import org.apache.commons.lang.RandomStringUtils;
-import org.apache.cxf.configuration.security.AuthorizationPolicy;
-import org.apache.cxf.endpoint.Client;
-import org.apache.cxf.frontend.ClientProxy;
-import org.apache.cxf.transport.http.HTTPConduit;
 import org.hamcrest.BaseMatcher;
-import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.frequentis.maritime.mcsr.web.soap.dto.PageDTO;
-import com.frequentis.maritime.mcsr.web.soap.dto.design.DesignDescriptorDTO;
 import com.frequentis.maritime.mcsr.web.soap.dto.doc.DocDTO;
 import com.frequentis.maritime.mcsr.web.soap.dto.doc.DocDescriptorDTO;
+import com.frequentis.maritime.mcsr.web.soap.errors.ProcessingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -90,7 +80,7 @@ public class DocResourceTest {
 	}
 
 	@Test
-	public void create() {
+	public void create() throws ProcessingException {
 		// Given
 		DocDTO newDoc = createDocument();
 
@@ -106,7 +96,7 @@ public class DocResourceTest {
 	}
 
 	@Test
-	public void getDocument() {
+	public void getDocument() throws ProcessingException {
 		// Given
 		DocDTO newDoc = createDocument();
 		DocDescriptorDTO doc = internal.createDoc(newDoc);
@@ -126,7 +116,7 @@ public class DocResourceTest {
 	}
 
 	@Test
-	public void getAllDocuments() {
+	public void getAllDocuments() throws ProcessingException {
 		// Given
 		int instanceCount = 4;
 		DocDescriptorDTO [] docs = new DocDescriptorDTO[instanceCount];
@@ -152,7 +142,7 @@ public class DocResourceTest {
 	}
 
 	@Test
-	public void rmeoveDocument() {
+	public void rmeoveDocument() throws ProcessingException {
 		// Given
 		long docCountBefore = internal.getAllDocs(0).itemTotalCount;
 		DocDescriptorDTO doc = internal.createDoc(createDocument());
@@ -168,7 +158,7 @@ public class DocResourceTest {
 	}
 
 	@Test
-	public void searchDocument() {
+	public void searchDocument() throws ProcessingException {
 		// Given
 		DocDTO template = createDocument();
 		String randomPrefix = RandomStringUtils.randomAlphanumeric(RANDOM_NAME_LENGTH);
@@ -193,7 +183,7 @@ public class DocResourceTest {
 	}
 
 	@Test
-	public void updateDocument() {
+	public void updateDocument() throws ProcessingException {
 		// Given
 		DocDTO doc = createDocument();
 		DocDescriptorDTO docBefore = internal.createDoc(doc);
